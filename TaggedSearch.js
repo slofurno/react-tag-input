@@ -4,7 +4,9 @@ const defaultContainerStyle = {
   borderWidth: "0 0 2px 0",
   borderStyle: "solid",
   borderColor: "gainsboro",
-  backgroundColor: "RGBA(0,0,0,.05)"
+  backgroundColor: "RGBA(0,0,0,0)",
+  backgroundColor: "white",
+  padding: "2px"
 }
 
 const defaultHighlightStyle = {
@@ -168,8 +170,7 @@ export default class TaggedSearch extends Component {
 
     let _containerStyle = {
       width: "100%",
-      overflow: "hidden",
-      padding: "4px 0"
+      overflow: "hidden"
     }
 
     let _tagStyle = {
