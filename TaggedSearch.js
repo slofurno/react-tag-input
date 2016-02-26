@@ -78,6 +78,12 @@ export default class TaggedSearch extends Component {
   }
   
   keyDown (e) {
+    let copy = Object.assign({}, e)
+    console.log(copy)
+    if (e.keyCode === 32 || e.keyCode === 188) {
+      e.preventDefault()
+    }
+
     if (e.key === "Backspace" && this.state.input.length === 0) {
       let tags = this.props.tags.slice()
 
@@ -225,6 +231,7 @@ export default class TaggedSearch extends Component {
         </div>
         <div style = {inputContainer}>
           <input 
+            ref = "input"
             style = {_inputStyle}
             type = "text"
             value = {input}
