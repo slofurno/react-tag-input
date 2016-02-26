@@ -4,8 +4,8 @@ export default class TaggedSearch extends Component {
 
   constructor (props) {
     super(props)
-    this.mouseOver = this.mouseOver.bind(this)
-    this.mouseOut = this.mouseOut.bind(this)
+    this.mouseEnter = this.mouseEnter.bind(this)
+    this.mouseLeave = this.mouseLeave.bind(this)
     this.focus = this.focus.bind(this)
     this.blur = this.blur.bind(this)
     this.keyDown = this.keyDown.bind(this)
@@ -23,11 +23,11 @@ export default class TaggedSearch extends Component {
     }
   }
 
-  mouseOver (e) {
+  mouseEnter (e) {
     this.setState({hover: true})
   } 
 
-  mouseOut (e) {
+  mouseLeave (e) {
     this.setState({hover: false})
   }
 
@@ -125,11 +125,8 @@ export default class TaggedSearch extends Component {
   render () {
 
     const {hover, focus, input} = this.state 
-    const {tags, placeholder} = this.props
+    const {tags, placeholder, tagDecal, containerStyle, highlightStyle, tagStyle, inputStyle } = this.props
     
-    let style = {
-    }  
-
     let tagContainer = {
       float: "left"
     }
@@ -138,6 +135,21 @@ export default class TaggedSearch extends Component {
       overflow: "hidden"
     }
 
+    let _containerStyle = {
+      width: "100%",
+      overflow: "hidden",
+      padding: "4px 0"
+    }
+
+    if (hover || focus) {
+      let hs = highlightStyle || {}
+      let cs = containerStyle || {}
+      _containerStyle = Object.assign({}, cs, hs, _containerStyle) 
+    } else if (containerStyle) {
+      _containerStyle = Object.assign({}, containerStyle, _containerStyle)
+    }
+
+/*
     let containerStyle = {
       width: "100%",
       overflow: "hidden",
@@ -147,18 +159,25 @@ export default class TaggedSearch extends Component {
       borderColor: "gainsboro",
       backgroundColor: "RGBA(0,0,0,.05)"
     }
+*/
 
-    if (hover || focus) {
-      containerStyle.borderColor = "plum"
-    }
-
+/*
     let defaultTag = {
       padding: "4px 6px",
       marginRight: 2,
       backgroundColor: "whitesmoke",
       cursor: "pointer"
     }
+    */
+    let _tagStyle = {
+      cursor: "pointer"
+    }
 
+    if (tagStyle) {
+      _tagStyle = Object.assign({}, tagStyle, _tagStyle)
+    }
+
+    /*
     let defaultInput = {
       outline: "none",
       borderWidth: 0,
@@ -167,39 +186,52 @@ export default class TaggedSearch extends Component {
       width: "100%",
       backgroundColor: "RGBA(0,0,0,0)"
     }
+    */
+    let _inputStyle = {
+      outline: "none",
+      borderWidth: 0,
+      margin: 0,
+      width: "100%",
+      backgroundColor: "RGBA(0,0,0,0)"
+    }
+
+    let ins = inputStyle || {}
+    _inputStyle = Object.assign({}, {padding: "2px"}, inputStyle, _inputStyle)
+
+    let decal = tagDecal || "#"
   
     let currentTags = tags.map((tag, i) => {
       let clickTag = e => this.removeTag(tag)
       return (
         <span 
           key={i}
-          style={defaultTag}
+          style={_tagStyle}
           onClick = {clickTag}
-        >{tag + "  #"}</span>
+        >{tag + "  " + decal}</span>
       )
     }) 
 
     return (
       <div 
-        onMouseOver = {this.mouseOver}
-        onMouseOut = {this.mouseOut}
-        style = {containerStyle}
+        onMouseEnter = {this.mouseEnter}
+        onMouseLeave = {this.mouseLeave}
+        style = {_containerStyle}
       >
-      <div style = {tagContainer}>
-        {currentTags}
-      </div>
-      <div style = {inputContainer}>
-        <input 
-          style = {defaultInput}
-          type = "text"
-          value = {input}
-          placeholder = {placeholder}
-          onKeyDown = {this.keyDown}
-          onBlur = {this.blur}
-          onFocus = {this.focus}
-          onChange = {this.change}
-        />
-      </div>
+        <div style = {tagContainer}>
+          {currentTags}
+        </div>
+        <div style = {inputContainer}>
+          <input 
+            style = {_inputStyle}
+            type = "text"
+            value = {input}
+            placeholder = {placeholder}
+            onKeyDown = {this.keyDown}
+            onBlur = {this.blur}
+            onFocus = {this.focus}
+            onChange = {this.change}
+          />
+        </div>
       </div>
     )
   }

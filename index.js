@@ -80,9 +80,35 @@ class App extends Component {
       )
     })
 
+    let containerStyle = {
+      borderWidth: "0 0 2px 0",
+      borderStyle: "solid",
+      borderColor: "gainsboro",
+      backgroundColor: "RGBA(0,0,0,.05)"
+    }
+
+    let highlightStyle = {
+      borderColor: "plum"
+    }
+
+    let tagStyle = {
+      padding: "4px 6px",
+      marginRight: 2,
+      backgroundColor: "whitesmoke"
+    }
+
     return (
       <div style={style}>
-        <TaggedSearch tags={tags} onTagsChange={updateTags} onInput={updateFuzzy} placeholder={"filter"}/>
+        <TaggedSearch 
+          tags={tags} 
+          onTagsChange={updateTags} 
+          onInput={updateFuzzy} 
+          placeholder={"filter"}
+          tagDecal={">>"}
+          containerStyle = {containerStyle}
+          highlightStyle = {highlightStyle}
+          tagStyle = {tagStyle}
+        />
         <ul>
           {filtered}
         </ul>
