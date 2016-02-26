@@ -1,5 +1,28 @@
 import React, { Component, PropTypes } from 'react'
 
+const defaultContainerStyle = {
+  borderWidth: "0 0 2px 0",
+  borderStyle: "solid",
+  borderColor: "gainsboro",
+  backgroundColor: "RGBA(0,0,0,.05)"
+}
+
+const defaultHighlightStyle = {
+  borderColor: "cornflowerblue"
+}
+
+const defaultTagStyle = {
+  padding: "4px 6px",
+  marginRight: "3px",
+  backgroundColor: "whitesmoke",
+  lineHeight: "1.5rem"
+}
+
+const defaultInputStyle = {
+  lineHeight: "1.5rem",
+  padding: "4px 6px"
+}
+
 export default class TaggedSearch extends Component {
 
   constructor (props) {
@@ -61,10 +84,6 @@ export default class TaggedSearch extends Component {
       }
 
       tags.pop()
-      //backspace will delete the extra space
-      //preventdefault would work, but this also gets us the timeout 
-      //let tag = tags.pop() + " "
-      //this.setState({input: tag})
       this.props.onTagsChange(tags)
     } else if (e.key === "Enter") {
       
@@ -123,10 +142,22 @@ export default class TaggedSearch extends Component {
   }
 
   render () {
+    const {
+      hover,
+      focus,
+      input
+    } = this.state 
 
-    const {hover, focus, input} = this.state 
-    const {tags, placeholder, tagDecal, containerStyle, highlightStyle, tagStyle, inputStyle } = this.props
-    
+    const {
+      tags, 
+      placeholder, 
+      tagDecal,
+      containerStyle, 
+      highlightStyle, 
+      tagStyle, 
+      inputStyle 
+    } = this.props
+
     let tagContainer = {
       float: "left"
     }
@@ -141,52 +172,11 @@ export default class TaggedSearch extends Component {
       padding: "4px 0"
     }
 
-    if (hover || focus) {
-      let hs = highlightStyle || {}
-      let cs = containerStyle || {}
-      _containerStyle = Object.assign({}, cs, hs, _containerStyle) 
-    } else if (containerStyle) {
-      _containerStyle = Object.assign({}, containerStyle, _containerStyle)
-    }
-
-/*
-    let containerStyle = {
-      width: "100%",
-      overflow: "hidden",
-      padding: "4px 0",
-      borderWidth: "0 0 2px 0",
-      borderStyle: "solid",
-      borderColor: "gainsboro",
-      backgroundColor: "RGBA(0,0,0,.05)"
-    }
-*/
-
-/*
-    let defaultTag = {
-      padding: "4px 6px",
-      marginRight: 2,
-      backgroundColor: "whitesmoke",
-      cursor: "pointer"
-    }
-    */
     let _tagStyle = {
-      cursor: "pointer"
+      cursor: "pointer",
+      display: "inline-block"
     }
 
-    if (tagStyle) {
-      _tagStyle = Object.assign({}, tagStyle, _tagStyle)
-    }
-
-    /*
-    let defaultInput = {
-      outline: "none",
-      borderWidth: 0,
-      margin: 0,
-      padding: "2px",
-      width: "100%",
-      backgroundColor: "RGBA(0,0,0,0)"
-    }
-    */
     let _inputStyle = {
       outline: "none",
       borderWidth: 0,
@@ -195,10 +185,22 @@ export default class TaggedSearch extends Component {
       backgroundColor: "RGBA(0,0,0,0)"
     }
 
-    let ins = inputStyle || {}
-    _inputStyle = Object.assign({}, {padding: "2px"}, inputStyle, _inputStyle)
+    if (hover || focus) {
+      let hs = highlightStyle || defaultHighlightStyle 
+      let cs = containerStyle || defaultContainerStyle 
+      _containerStyle = Object.assign({}, cs, hs, _containerStyle) 
+    } else {
+      let cs = containerStyle || defaultContainerStyle
+      _containerStyle = Object.assign({}, cs, _containerStyle)
+    }
 
-    let decal = tagDecal || "#"
+    let ts = tagStyle || defaultTagStyle
+    _tagStyle = Object.assign({}, ts, _tagStyle)
+
+    let ins = inputStyle || defaultInputStyle
+    _inputStyle = Object.assign({}, {padding: "2px"}, ins, _inputStyle)
+
+    let decal = tagDecal || '\xD7'
   
     let currentTags = tags.map((tag, i) => {
       let clickTag = e => this.removeTag(tag)

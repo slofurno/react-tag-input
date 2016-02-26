@@ -94,7 +94,13 @@ class App extends Component {
     let tagStyle = {
       padding: "4px 6px",
       marginRight: 2,
-      backgroundColor: "whitesmoke"
+      backgroundColor: "whitesmoke",
+      lineHeight: "1.5rem"
+    }
+
+    let inputStyle = {
+      lineHeight: "1.5rem",
+      padding: "4px 6px"
     }
 
     return (
@@ -104,10 +110,11 @@ class App extends Component {
           onTagsChange={updateTags} 
           onInput={updateFuzzy} 
           placeholder={"filter"}
-          tagDecal={">>"}
-          containerStyle = {containerStyle}
-          highlightStyle = {highlightStyle}
-          tagStyle = {tagStyle}
+          //tagDecal={">>"}
+          //containerStyle = {containerStyle}
+          //highlightStyle = {highlightStyle}
+          //tagStyle = {tagStyle}
+          //inputStyle = {inputStyle}
         />
         <ul>
           {filtered}
