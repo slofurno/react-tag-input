@@ -15,6 +15,8 @@ class App extends Component {
   }
 
   render () {
+    const {tags, fuzzy} = this.state
+    console.log(tags, fuzzy)
 
     let javascript = "javascript"
     let html = "html"
@@ -31,50 +33,12 @@ class App extends Component {
       {name: "papa_steve", languages: [javascript, c, go]}
     ]
 
-    const {tags, fuzzy} = this.state
-    console.log(tags, fuzzy)
-
-    let updateTags = (tags) => {
-      this.setState({tags}) 
-    }
-
-    let updateInput = (fuzzy) => {
-      this.setState({fuzzy})
-    }
-
-    let popTag = () => {
-      let next = tags.slice()
-      next.pop()
-      this.setState({tags: next}) 
-    }
-
-    let pushTag = () => {
-      let next = tags.slice()
-
-      if (tags.indexOf(fuzzy) == -1) {
-        next.push(fuzzy)
-      }
-
-      this.setState({
-        tags: next,
-        fuzzy: ''
-      })
-    }
-
-    let onTagClick = (tag) => {
-      let filtered = tags.slice().filter(x => x !== tag)
-      this.setState({
-        tags:filtered
-      })
-    }
-
     let style = {
       minHeight: 250,
       width: 600,
       padding: 6,
       backgroundColor: "seashell"
     }
-
 
     let filtered = bookmarks.filter(x => {
       let languages = x.languages
@@ -106,20 +70,54 @@ class App extends Component {
       )
     })
 
+//required funcs
+//
+    let updateInput = (fuzzy) => {
+      this.setState({fuzzy})
+    }
+
+    let popTag = () => {
+      let next = tags.slice()
+      next.pop()
+      this.setState({tags: next}) 
+    }
+
+    let pushTag = () => {
+      let next = tags.slice()
+
+      if (tags.indexOf(fuzzy) == -1) {
+        next.push(fuzzy)
+      }
+
+      this.setState({
+        tags: next,
+        fuzzy: ''
+      })
+    }
+
+    let onTagClick = (tag) => {
+      let filtered = tags.slice().filter(x => x !== tag)
+      this.setState({
+        tags:filtered
+      })
+    }
+
+//optional styles
     let containerStyle = {
       borderWidth: "0 0 2px 0",
       borderStyle: "solid",
       borderColor: "gainsboro",
-      backgroundColor: "RGBA(0,0,0,.05)"
+      backgroundColor: "white",
+      padding: "2px"
     }
 
     let highlightStyle = {
-      borderColor: "plum"
+      borderColor: "cornflowerblue"
     }
 
     let tagStyle = {
       padding: "4px 6px",
-      marginRight: 2,
+      marginRight: "3px",
       backgroundColor: "whitesmoke",
       lineHeight: "1.5rem"
     }
@@ -130,17 +128,17 @@ class App extends Component {
     }
 
     return (
-      <div style={style}>
+      <div style = {style}>
         <TaggedSearch 
-          tags={tags} 
+          tags = {tags} 
           onTagClick = {onTagClick}
-          onInput={updateInput} 
+          onInput = {updateInput} 
           pushTag = {pushTag}
           popTag = {popTag}
           value = {fuzzy}
 
-          placeholder={"filter"}
-          //tagDecal={">>"}
+          placeholder = {"filter"}
+          //tagDecal={"\xD7"}
           //containerStyle = {containerStyle}
           //highlightStyle = {highlightStyle}
           //tagStyle = {tagStyle}
