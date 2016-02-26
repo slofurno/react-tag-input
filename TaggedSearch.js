@@ -221,15 +221,19 @@ export default class TaggedSearch extends Component {
     }) 
 
     return (
-      <div 
+      <div
+        ref = "tag-input-container"
         onMouseEnter = {this.mouseEnter}
         onMouseLeave = {this.mouseLeave}
         style = {_containerStyle}
       >
-        <div style = {tagContainer}>
+        <div 
+          ref = "tag-container"
+          style = {tagContainer}
+        >
           {currentTags}
         </div>
-        <div style = {inputContainer}>
+        <div style = {inputContainer} ref = "input-container">
           <input 
             ref = "input"
             style = {_inputStyle}
