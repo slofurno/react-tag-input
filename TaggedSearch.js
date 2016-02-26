@@ -35,16 +35,13 @@ export default class TaggedSearch extends Component {
     this.blur = this.blur.bind(this)
     this.keyDown = this.keyDown.bind(this)
     this.change = this.change.bind(this)
-    this.removeTag = this.removeTag.bind(this)
-    this.addTag = this.addTag.bind(this)
-    this.setInput = this.setInput.bind(this)
+    this.idleAdd = this.idleAdd.bind(this)
 
     this.timeout = -1
 
     this.state = {
       hover: false,
-      focus: false,
-      input: ""
+      focus: false
     }
   }
 
@@ -64,106 +61,60 @@ export default class TaggedSearch extends Component {
     this.setState({focus: false})
   }
 
-  setInput (input) {
-    if (this.state.input === input) {
-      return
-    }
-
-    const { onInput } = this.props
-
-    if (typeof(onInput) === "function") {
-      onInput(input)
-    }
-    this.setState({input})
-  }
-  
   keyDown (e) {
-    let copy = Object.assign({}, e)
-    console.log(copy)
-    if (e.keyCode === 32 || e.keyCode === 188) {
+    const { pushTag, popTag, value, tags } = this.props
+
+    clearTimeout(this.timeout)
+
+    if (e.keyCode === 32 || e.keyCode === 188 || e.key === "Enter") {
       e.preventDefault()
+
+      if (e.target.value.length > 0) {
+        pushTag() 
+      }
     }
 
-    if (e.key === "Backspace" && this.state.input.length === 0) {
-      let tags = this.props.tags.slice()
+    if (e.key === "Backspace" && value.length === 0) {
+      e.preventDefault()
 
-      if (tags.length === 0) {
-        return
+      if (tags.length > 0) {
+        popTag()
       }
-
-      tags.pop()
-      this.props.onTagsChange(tags)
-    } else if (e.key === "Enter") {
-      
-      clearTimeout(this.timeout)
-      let input = e.target.value
-      let tag = input.replace(/[^\w\d]/g, '')
-
-      if (tag.length > 0) {
-        this.addTag(tag)
-      }
-
-    }
+    } 
   }
 
-  addTag (tag) {
-
-    let tags = this.props.tags.slice()
-    this.setInput('')
-
-    if (tags.indexOf(tag) >= 0) return
-
-    tags.push(tag)
-    const { onTagsChange } = this.props
-    onTagsChange(tags)
+  idleAdd () {
+    const { value, pushTag } = this.props
+    if (value.length > 0) {
+      pushTag()
+    }
   }
 
   change (e) {
-    let input = e.target.value
-    let last = input.slice(-1)
-    let tag = input.replace(/[^\w\d]/g, '')
-    
-    clearTimeout(this.timeout)
-    if (tag.length === 0) {
-      this.setInput('')
-      return
-    }
-
-    let addTag = () => {
-      this.addTag(tag)
-    }
-
-    if (last === ',' || last === ' ') {
-      addTag()
-    } else {
-      this.timeout = setTimeout(addTag, 1000)
-      this.setInput(tag)
-    }
-
-  }
-
-  removeTag (tag) {
-    let tags = this.props.tags.filter(x => x !== tag)
-
-    const { onTagsChange } = this.props
-    onTagsChange(tags)
+    const { onInput } = this.props
+    let add = this.idleAdd
+    this.timeout = setTimeout(add, 1000)
+    onInput(e.target.value)
   }
 
   render () {
     const {
       hover,
-      focus,
-      input
+      focus
     } = this.state 
 
     const {
       tags, 
+      value,
       placeholder, 
+
+      onTagClick,
+
       tagDecal,
       containerStyle, 
       highlightStyle, 
       tagStyle, 
-      inputStyle 
+      inputStyle
     } = this.props
 
     let tagContainer = {
@@ -210,7 +161,7 @@ export default class TaggedSearch extends Component {
     let decal = tagDecal || '\xD7'
   
     let currentTags = tags.map((tag, i) => {
-      let clickTag = e => this.removeTag(tag)
+      let clickTag = () => onTagClick(tag)
       return (
         <span 
           key={i}
@@ -222,23 +173,18 @@ export default class TaggedSearch extends Component {
 
     return (
       <div
-        ref = "tag-input-container"
         onMouseEnter = {this.mouseEnter}
         onMouseLeave = {this.mouseLeave}
         style = {_containerStyle}
       >
-        <div 
-          ref = "tag-container"
-          style = {tagContainer}
-        >
+        <div style = {tagContainer}>
           {currentTags}
         </div>
-        <div style = {inputContainer} ref = "input-container">
+        <div style = {inputContainer}>
           <input 
-            ref = "input"
             style = {_inputStyle}
             type = "text"
-            value = {input}
+            value = {value}
             placeholder = {placeholder}
             onKeyDown = {this.keyDown}
             onBlur = {this.blur}
@@ -252,6 +198,10 @@ export default class TaggedSearch extends Component {
 }
 
 TaggedSearch.propTypes = {
-  onTagsChange: React.PropTypes.func.isRequired,
-  tags: React.PropTypes.array.isRequired
+  tags: React.PropTypes.array.isRequired,
+
+  onTagClick: React.PropTypes.func.isRequired,
+  onInput: React.PropTypes.func.isRequired,
+  pushTag: React.PropTypes.func.isRequired,
+  popTag: React.PropTypes.func.isRequired
 }

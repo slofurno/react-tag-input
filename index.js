@@ -38,8 +38,34 @@ class App extends Component {
       this.setState({tags}) 
     }
 
-    let updateFuzzy = (fuzzy) => {
+    let updateInput = (fuzzy) => {
       this.setState({fuzzy})
+    }
+
+    let popTag = () => {
+      let next = tags.slice()
+      next.pop()
+      this.setState({tags: next}) 
+    }
+
+    let pushTag = () => {
+      let next = tags.slice()
+
+      if (tags.indexOf(fuzzy) == -1) {
+        next.push(fuzzy)
+      }
+
+      this.setState({
+        tags: next,
+        fuzzy: ''
+      })
+    }
+
+    let onTagClick = (tag) => {
+      let filtered = tags.slice().filter(x => x !== tag)
+      this.setState({
+        tags:filtered
+      })
     }
 
     let style = {
@@ -107,8 +133,12 @@ class App extends Component {
       <div style={style}>
         <TaggedSearch 
           tags={tags} 
-          onTagsChange={updateTags} 
-          onInput={updateFuzzy} 
+          onTagClick = {onTagClick}
+          onInput={updateInput} 
+          pushTag = {pushTag}
+          popTag = {popTag}
+          value = {fuzzy}
+
           placeholder={"filter"}
           //tagDecal={">>"}
           //containerStyle = {containerStyle}
