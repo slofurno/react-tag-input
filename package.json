@@ -1,6 +1,6 @@
 {
-  "name": "react-tag-input",
-  "version": "1.0.0",
+  "name": "react-tag-search",
+  "version": "0.8.1",
   "description": "",
   "main": "lib/taggedInput.js",
   "scripts": {
@@ -9,7 +9,9 @@
   },
   "author": "slofurno",
   "license": "MIT",
-  "peerDependencies": {},
+  "peerDependencies": {
+    "react": "^0.14.6"
+  },
   "devDependencies": {
     "babel": "^6.5.2",
     "babel-core": "^6.4.5",
@@ -18,9 +20,6 @@
     "babel-preset-react": "^6.3.13",
     "babel-register": "^6.5.2",
     "mocha": "^2.3.3",
-    "react": "^0.14.6",
-    "react-addons-test-utils": "^0.14.7",
-    "react-dom": "^0.14.7",
     "webpack": "^1.12.12"
   }
 }

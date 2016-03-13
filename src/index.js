@@ -62,6 +62,8 @@ export default class TaggedSearch extends Component {
   }
 
   keyDown (e) {
+
+    console.log(this.props)
     const { pushTag, popTag, value, tags } = this.props
 
     clearTimeout(this.timeout)
